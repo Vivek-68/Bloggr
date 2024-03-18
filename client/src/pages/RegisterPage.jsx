@@ -10,20 +10,27 @@ const RegisterPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-      await fetch('http://localhost:3000/register',{
+      const response = await fetch('http://localhost:3000/register',{
         method:'POST',
         body: JSON.stringify(formData),
         headers:{'Content-Type':'application/json'}
       })
+         if(response.status >= 400){
+          alert("Registration failed!");
+         }
+         else{
+          alert("Registration Successful!");
+         }
     }
     catch(err){
       console.log(err.message);
+      
     }
 
   }
 
   return (
-    <div className='m-4 my-24'>
+    <div className='m-4 my-8'>
       <form className='flex flex-col gap-2 sm-w-[50%] lg:w-[40%] border-gray-200 rounded-md border-2 m-auto p-6 font-poppins' onSubmit={handleSubmit}>
         <h2 className='text-xl sm:text-2xl mb-4 font-semibold'>Create an account</h2>
         <p>Email</p>
