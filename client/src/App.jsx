@@ -13,6 +13,7 @@ import { AuthProvider } from "./auth/Auth";
 import CreatePost from "./pages/CreatePost";
 import PostPage from "./pages/PostPage";
 import EditPage from "./pages/EditPage";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   return (
@@ -23,9 +24,11 @@ function App() {
             <Route index element={<IndexPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/create" element={<CreatePost />} />
             <Route path="/posts/:id" element={<PostPage />} />
+            <Route element={<RequireAuth/>}>
+            <Route path="/create" element={<CreatePost />} />
             <Route path="/edit/:id" element={<EditPage />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>

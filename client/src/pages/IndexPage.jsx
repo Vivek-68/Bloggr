@@ -8,9 +8,7 @@ import { AuthContext } from '../auth/Auth';
 const IndexPage = () => {
   const [posts,setPosts] = useState([]);
   const{user} = useContext(AuthContext);
-  console.log(user)
   
-
 useEffect(()=>{
   fetchPosts();
 },[]);
@@ -25,6 +23,7 @@ const fetchPosts = async() =>{
     console.log(e);
   }
 };
+
 
   return (
     <>

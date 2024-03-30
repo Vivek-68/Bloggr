@@ -18,6 +18,7 @@ const Header = () => {
 
         if(response.ok){
         setUserinfo({username:data.username,id:data._id});
+        setUser(data.username);
         }
       }
         catch(e){
