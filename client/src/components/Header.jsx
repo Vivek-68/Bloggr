@@ -1,19 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../context/userContext';
+import { AuthContext } from '../auth/Auth';
 
 const Header = () => {
 
   const {userinfo,setUserinfo} = useContext(UserContext);
-  const [username,setUsername] = useState(null);
+  const {setUser} = useContext(AuthContext);
+  
 
   const handleLogin = async() =>{
     try{
         const response = await fetch("http://localhost:3000/profile",{
           credentials:'include',
         });
-        if(response.ok){
         const data = await response.json();
+
+        if(response.ok){
         setUserinfo({username:data.username,id:data._id});
         }
       }
@@ -24,7 +27,7 @@ const Header = () => {
 
   useEffect(()=>{
     handleLogin();
-  },[userinfo]);
+  },[]);
 
   async function logout(){
     try{
@@ -33,6 +36,7 @@ const Header = () => {
         credentials:'include'
       });
       setUserinfo(null);
+      setUser(null);
     }
     catch(e){
       console.log(e.message);
@@ -42,10 +46,10 @@ const Header = () => {
 
   return (
     <div className='flex justify-between items-center text-[#333]'>
-        <Link to='/' className='[font-size:clamp(1.5rem,3vw+1rem,4rem)]'>Bloggr.</Link>
-        <div className='[font-size:clamp(.75rem,1vw+.25rem,2rem)] flex gap-4 md:gap-12'>
-            {userinfo?<Link to ='/create'>Create new post</Link> :<Link to='/login'>Login</Link>}
-            {userinfo?<a onClick={logout}>Logout</a>:<Link to='/register'>Register</Link>}
+        <Link to='/' className='[font-size:clamp(1.5rem,3vw+.75rem,3.5rem)]'>Bloggr.</Link>
+        <div className='[font-size:clamp(.75rem,1vw+.25rem,1.75rem)] flex gap-4 md:gap-12 '>
+            {userinfo?<Link to ='/create' className='p-2 hover:border-black border-2 border-white rounded-md'>Create new post</Link> :<Link to='/login' className='p-2 hover:border-black border-2 border-white rounded-md'>Login</Link>}
+            {userinfo?<a onClick={logout} className='hover:border-black border-white border-2 p-2 rounded-md cursor-pointer'>Logout</a>:<Link to='/register' className='p-2 hover:border-black border-2 border-white rounded-md'>Register</Link>}
         </div>
     </div>
   )

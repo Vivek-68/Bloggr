@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { Navigate } from 'react-router-dom';
 
 const RegisterPage = () => {
 
+  const [redirect,setRedirect] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -19,6 +21,7 @@ const RegisterPage = () => {
           alert("Registration failed!");
          }
          else{
+          setRedirect(true);
           alert("Registration Successful!");
          }
     }
@@ -28,7 +31,9 @@ const RegisterPage = () => {
     }
 
   }
-
+if(redirect){
+  return <Navigate to='/login'/>;
+}
   return (
     <div className='m-4 my-8'>
       <form className='flex flex-col gap-2 sm-w-[50%] lg:w-[40%] border-gray-200 rounded-md border-2 m-auto p-6 font-poppins' onSubmit={handleSubmit}>
