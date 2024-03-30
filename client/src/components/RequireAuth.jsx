@@ -5,6 +5,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 const RequireAuth = () => {
     const {user} = useContext(AuthContext);
     const location = useLocation();
+   
   return (
     
         user?<Outlet/>

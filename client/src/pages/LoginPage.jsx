@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { AuthContext } from "../auth/Auth";
 
 const LoginPage = () => {
   const { setUserinfo } = useContext(UserContext);
   const {setUser} = useContext(AuthContext);
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || '/';
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -32,15 +34,15 @@ const LoginPage = () => {
         setUserinfo({ id: response._id, username: response.username });
         setRedirect(true);
       } else {
-        setRedirect(false);
         alert("Wrong credentials!");
       }
     } catch (e) {
       console.log(e.message);
     }
   };
+
   if (redirect) {
-    return <Navigate to="/" />;
+    return navigate(from, {replace:true});
   }
 
   return (
