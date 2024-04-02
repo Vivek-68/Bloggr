@@ -7,8 +7,13 @@ const multer = require('multer');
 const upload = multer({dest:'uploads/'});
 const mongoose = require('mongoose');
 const fs = require('fs')
+const {validateRegistration,validateLogin} = require('./services/validation');
 
 router.post('/register',async(req,res)=>{
+    const {error} = validateRegistration(req.body);
+    if(error){
+       return res.status(400).json(error.details[0].message);
+    }
     try{
         const {email,password} = req.body;
         const hashedPassword = await bcrypt.hash(password,10);
@@ -23,15 +28,19 @@ router.post('/register',async(req,res)=>{
 
 
 router.post('/login',async(req,res)=>{
+const {error} = validateLogin(req.body);
+if(error){
+    return res.status(400).json(error.details[0].message);
+}
 try{
     const {email,password} = req.body;
     const user = await User.findOne({username:email});
     if(!user){
-        return res.status(400).json({message:"Email does not exist!"});
+        return res.status(400).json("Email does not exist!");
     }
     const passwordOK = await bcrypt.compare(password,user.password);
     if(!passwordOK){
-        return res.status(400).json({message:"Incorrect password!"});
+        return res.status(400).json("Incorrect password!");
     }
 
     const token = jwt.sign({id:user._id,username:email},process.env.SECRET_KEY);
@@ -41,7 +50,7 @@ try{
 
 }
 catch(e){
-    res.status(400).json(e);
+    res.status(400).json(e.message);
 }
 })
 

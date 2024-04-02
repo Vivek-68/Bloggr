@@ -14,6 +14,7 @@ const LoginPage = () => {
     password: "",
   });
   const [redirect, setRedirect] = useState(false);
+  const [error,setError] = useState(null);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -34,7 +35,8 @@ const LoginPage = () => {
         setUserinfo({ id: response._id, username: response.username });
         setRedirect(true);
       } else {
-        alert("Wrong credentials!");
+        response = await response.json();
+        setError(response);
       }
     } catch (e) {
       console.log(e.message);
@@ -75,6 +77,9 @@ const LoginPage = () => {
         >
           Login
         </button>
+        {
+          error && <p className="text-red-500">{error}</p>
+        }
       </form>
     </div>
   );

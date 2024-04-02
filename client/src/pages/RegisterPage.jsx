@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 const RegisterPage = () => {
 
   const [redirect,setRedirect] = useState(false);
+  const [error,setError] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -12,13 +13,14 @@ const RegisterPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-      const response = await fetch('http://localhost:3000/register',{
+      let response = await fetch('http://localhost:3000/register',{
         method:'POST',
         body: JSON.stringify(formData),
         headers:{'Content-Type':'application/json'}
       })
          if(response.status >= 400){
-          alert("Registration failed!");
+          response = await response.json();
+          setError(response);
          }
          else{
           setRedirect(true);
@@ -31,6 +33,7 @@ const RegisterPage = () => {
     }
 
   }
+
 if(redirect){
   return <Navigate to='/login'/>;
 }
@@ -47,6 +50,9 @@ if(redirect){
           prev => ({ ...prev, [e.target.name]: e.target.value })
         )} />
         <button className='mt-6 rounded-md hover:bg-black hover:text-white border-black border-2 p-1.5' type='submit'>Create account</button>
+        {
+          error && <p className='text-red-500'>{error}</p>
+        }
       </form>
     </div>
   )
