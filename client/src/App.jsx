@@ -14,6 +14,7 @@ import CreatePost from "./pages/CreatePost";
 import PostPage from "./pages/PostPage";
 import EditPage from "./pages/EditPage";
 import RequireAuth from "./components/RequireAuth";
+import PreventAuth from "./components/PreventAuth";
 
 function App() {
   return (
@@ -22,8 +23,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<IndexPage />} />
+            <Route element={<PreventAuth/>}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            </Route>
             <Route path="/posts/:id" element={<PostPage />} />
             <Route element={<RequireAuth/>}>
             <Route path="/create" element={<CreatePost />} />
